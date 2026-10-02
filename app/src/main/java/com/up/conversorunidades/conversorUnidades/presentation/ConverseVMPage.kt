@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,14 +36,15 @@ import com.up.conversorunidades.conversorUnidades.presentation.components.TopBar
 
 @Composable
 fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
-    // estados para campo de texto
-    val input1 by viewModel.input1.collectAsStateWithLifecycle()
-    val inputStat1 = rememberTextFieldState(input1)
-    val input2 by viewModel.input2.collectAsStateWithLifecycle()
-    val inputStat2 = rememberTextFieldState(input2)
-    // estados para el menu desplegable
+    // Estados provenientes del ViewModel
+    val inputText1 by viewModel.inputText1.collectAsStateWithLifecycle()
+    val inputText2 by viewModel.inputText2.collectAsStateWithLifecycle()
     val stateMenu by viewModel.stateMenu.collectAsStateWithLifecycle()
     val stateMenu2 by viewModel.stateMenu2.collectAsStateWithLifecycle()
+    val unidad1 by viewModel.unidad1.collectAsStateWithLifecycle()
+    val unidad2 by viewModel.unidad2.collectAsStateWithLifecycle()
+
+    val listaUnidades = listOf("Centímetros", "Metros", "Kilómetros", "Pulgadas")
 
     Scaffold(
         topBar = { TopBarTitle() }
@@ -53,35 +55,29 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Primer Selector de Unidad
             Box {
-                TitleUnit("Centímetros", input = 1)
+                TitleUnit(
+                    texto = unidad1,
+                    onClick = { viewModel.abrirMenu() }
+                )
                 DropdownMenu(
                     expanded = stateMenu,
-                    onDismissRequest = {viewModel.cerrarMenu()}
+                    onDismissRequest = { viewModel.cerrarMenu() }
                 ) {
-                    DropdownMenuItem(
-                        text = { Text("Pulgadas") },
-                        onClick = {viewModel.cerrarMenu()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Metros") },
-                        onClick = {viewModel.cerrarMenu()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Kilómetros") },
-                        onClick = {viewModel.cerrarMenu()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Millas") },
-                        onClick = {viewModel.cerrarMenu()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Centimetros") },
-                        onClick = {viewModel.cerrarMenu()}
-                    )
-
+                    listaUnidades.forEach { unidad ->
+                        DropdownMenuItem(
+                            text = { Text(unidad) },
+                            onClick = {
+                                viewModel.seleccionarUnidad1(unidad)
+                                viewModel.cerrarMenu()
+                            }
+                        )
+                    }
                 }
             }
+
+            // Campo de Texto 1
             Surface(
                 modifier = Modifier
                     .padding(16.dp)
@@ -89,15 +85,19 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                     .padding(1.dp),
                 shape = RoundedCornerShape(45.dp),
                 color = Color.Gray,
-                border = BorderStroke(16.dp, Color.LightGray)
+                border = BorderStroke(16.dp, Color.LightGray),
+                shadowElevation =  4.dp
             ) {
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
-                    state = inputStat1,
-                    textStyle = TextStyle(fontSize = 27.sp),
-                    decorator = { innerTextField ->
+                    value = inputText1,
+                    onValueChange = { viewModel.onInput1Changed(it) },
+                    textStyle = TextStyle(fontSize = 27.sp, color = Color.White),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    decorationBox = { innerTextField ->
                         Row(
                             modifier = Modifier.fillMaxSize(),
                             horizontalArrangement = Arrangement.Center,
@@ -108,6 +108,8 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                     }
                 )
             }
+
+            // Ícono de intercambio
             Icon(
                 modifier = Modifier
                     .padding(top = 26.dp)
@@ -115,35 +117,30 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                 painter = painterResource(id = R.drawable.intercambiar),
                 contentDescription = "Intercambiar unidades"
             )
+
+            // Segundo Selector de Unidad
             Box {
-                TitleUnit("Pulgadas", input = 2)
+                TitleUnit(
+                    texto = unidad2,
+                    onClick = { viewModel.abrirMenu2() }
+                )
                 DropdownMenu(
                     expanded = stateMenu2,
-                    onDismissRequest = {viewModel.cerrarMenu2()}
+                    onDismissRequest = { viewModel.cerrarMenu2() }
                 ) {
-                    DropdownMenuItem(
-                        text = { Text("Pulgadas") },
-                        onClick = {viewModel.cerrarMenu2()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Metros") },
-                        onClick = {viewModel.cerrarMenu2()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Kilómetros") },
-                        onClick = {viewModel.cerrarMenu2()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Millas") },
-                        onClick = {viewModel.cerrarMenu2()}
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Centimetros") },
-                        onClick = {viewModel.cerrarMenu2()}
-                    )
-
+                    listaUnidades.forEach { unidad ->
+                        DropdownMenuItem(
+                            text = { Text(unidad) },
+                            onClick = {
+                                viewModel.seleccionarUnidad2(unidad)
+                                viewModel.cerrarMenu2()
+                            }
+                        )
+                    }
                 }
             }
+
+            // Campo de Texto 2
             Surface(
                 modifier = Modifier
                     .padding(16.dp)
@@ -158,9 +155,12 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
-                    state = inputStat2,
-                    textStyle = TextStyle(fontSize = 27.sp),
-                    decorator = { innerTextField ->
+                    value = inputText2,
+                    onValueChange = { viewModel.onInput2Changed(it) },
+                    textStyle = TextStyle(fontSize = 27.sp, color = Color.White),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    decorationBox = { innerTextField ->
                         Row(
                             modifier = Modifier.fillMaxSize(),
                             horizontalArrangement = Arrangement.Center,

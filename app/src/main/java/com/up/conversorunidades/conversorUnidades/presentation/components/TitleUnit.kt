@@ -13,22 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.up.conversorunidades.conversorUnidades.presentation.ConverseUniViewModel
 
 @Composable
-fun TitleUnit(texto: String, viewModel: ConverseUniViewModel = viewModel(), input: Int) {
+fun TitleUnit(
+    texto: String,
+    onClick: () -> Unit = {}
+) {
     Surface(
         modifier = Modifier
             .padding(top = 45.dp)
             .size(167.dp, 34.dp)
             .padding(1.dp)
-            .clickable{
-                when{
-                    input == 1 -> viewModel.abrirMenu()
-                    input == 2 -> viewModel.abrirMenu2()
-                }
-            },
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(9.dp),
         color = Color.Black
     ) {
@@ -46,5 +42,5 @@ fun TitleUnit(texto: String, viewModel: ConverseUniViewModel = viewModel(), inpu
 @Composable
 @Preview
 fun TextUnitPreview() {
-    TitleUnit("Centímetros", input = 1)
+    TitleUnit("Centímetros")
 }
