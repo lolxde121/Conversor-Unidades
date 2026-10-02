@@ -22,7 +22,7 @@ fun TitleUnit(
     Surface(
         modifier = Modifier
             .padding(top = 45.dp)
-            .size(167.dp, 34.dp)
+            .size(167.dp, 45.dp)
             .padding(1.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(9.dp),
