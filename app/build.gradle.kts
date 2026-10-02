@@ -39,6 +39,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation("androidx.compose.ui:ui-text-google-fonts:1.7.0") // Usa la última versión estable
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

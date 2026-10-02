@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TitleUnit(){
+fun TitleUnit(texto: String){
     Surface(
         modifier = Modifier.padding(top = 45.dp).size(167.dp,34.dp).padding(1.dp),
         shape = RoundedCornerShape(9.dp),
@@ -23,7 +23,7 @@ fun TitleUnit(){
     ) {
         Text(
             modifier = Modifier.fillMaxSize().padding(9.dp),
-            text = "hola",
+            text = "$texto",
             color = Color.White,
             textAlign = TextAlign.Center
         )
@@ -32,6 +32,6 @@ fun TitleUnit(){
 @Composable
 @Preview
 fun TextUnitPreview(){
-    TitleUnit()
+    TitleUnit("hola")
 
 }
