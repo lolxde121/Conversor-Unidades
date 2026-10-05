@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.up.conversorunidades.R
+import com.up.conversorunidades.conversorUnidades.presentation.components.Profile
 import com.up.conversorunidades.conversorUnidades.presentation.components.TitleUnit
 import com.up.conversorunidades.conversorUnidades.presentation.components.TopBarTitle
 
@@ -43,6 +45,9 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
     val stateMenu2 by viewModel.stateMenu2.collectAsStateWithLifecycle()
     val unidad1 by viewModel.unidad1.collectAsStateWithLifecycle()
     val unidad2 by viewModel.unidad2.collectAsStateWithLifecycle()
+    //perfil
+    val nombrePerfil by viewModel.nombre.collectAsStateWithLifecycle()
+    val matriculaPerfil by viewModel.matricula.collectAsStateWithLifecycle()
 
     val listaUnidades = listOf("Centímetros", "Metros", "Kilómetros", "Pulgadas")
 
@@ -61,6 +66,7 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                     texto = unidad1,
                     onClick = { viewModel.abrirMenu() }
                 )
+                Profile(nombrePerfil, matriculaPerfil)
                 DropdownMenu(
                     expanded = stateMenu,
                     onDismissRequest = { viewModel.cerrarMenu() }
@@ -171,7 +177,15 @@ fun ConverseVMPage(viewModel: ConverseUniViewModel = viewModel()) {
                     }
                 )
             }
+            Button(
+                onClick = {
+                    viewModel.cargarDatos()
+                }
+            ) {
+                Text(text= "cargar Perfil")
+            }
         }
+
     }
 }
 

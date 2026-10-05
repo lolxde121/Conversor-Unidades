@@ -28,6 +28,19 @@ class ConverseUniViewModel : ViewModel() {
 
     private val _inputText2 = MutableStateFlow("39.37")
     val inputText2: StateFlow<String> = _inputText2.asStateFlow()
+    //perfil
+    private var _nombre = MutableStateFlow("")
+    val nombre: StateFlow<String> = _nombre.asStateFlow()
+    private var _matricula = MutableStateFlow("")
+    val matricula: StateFlow<String>  = _matricula.asStateFlow()
+
+    val nombreGuardado = "Edgar"
+    val matriculaGuardada = "253718"
+
+    fun cargarDatos(){
+        _nombre.value = nombreGuardado
+        _matricula.value = matriculaGuardada
+    }
 
     fun abrirMenu() {
         _stateMenu.value = true
